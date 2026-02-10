@@ -1,0 +1,322 @@
+\documentclass[%
+    luatex,% LuaLaTeX指定
+    paper=a4paper,%用紙サイズ指定
+    line_length=24zw,%
+    baselineskip=15pt,%
+    notitlepage, %タイトルを1ページ目の上部に出力する
+    fontsize=11pt,%欧文フォントサイズ指定
+    jlreq_notes,%JLReqに反する記述に警告
+    twocolumn,%二段組
+    column_gap=2zw,%左右の間の幅
+    head_space=20mm,%
+    foot_space=20mm
+]{jlreq}
+\ltjenableadjust[profile=true] % 数式が縦にデカいときに行送りをよしなにやる．美文書p.299
+\usepackage{jlreq-complements}
+\jlreqsetup{
+    abstract_with_maketitle=true %abstractを生成する
+}
+%%% 数式の上下のスペースの変更
+\AtBeginDocument{
+  \abovedisplayskip     =0.5\abovedisplayskip
+  \abovedisplayshortskip=0.5\abovedisplayshortskip
+  \belowdisplayskip     =0.5\belowdisplayskip
+  \belowdisplayshortskip=0.5\belowdisplayshortskip}
+%%%
+\jlreqsetup{
+    itemization_beforeafter_space=7pt,%
+    itemization_itemsep=5pt
+}
+
+\usepackage{luatexja}
+\usepackage{luatexja-ruby}%ルビ
+\usepackage{luatexja-adjust}
+\usepackage{luatexja-fontspec}
+\usepackage{luatexja-otf}
+\usepackage{luacolor,lua-ul} %xcolor,luacolorは色, lua-ulは下線
+\usepackage{mathtools}
+
+\usepackage[warnings-off={mathtools-colon}]{unicode-math}
+\unimathsetup{
+    math-style=ISO,
+    sans-style=upright,
+    normal-style   = TeX,
+    math-style     = TeX,
+    bold-style     = TeX,
+    slash-delimiter= frac,
+}
+\AtBeginDocument{
+\mathitalicsmode=1
+}
+\usepackage{fontspec}
+\usepackage{fontenc}
+\usepackage[default]{fontsetup}
+%\setmainfont{TeX Gyre Pagella}[Ligatures=TeX, Numbers={Proportional},]
+\setmathfont[CharacterVariant=1]{NewComputerModernMath}
+\setmathfont[range={cal,bfcal},StylisticSet=1]{Euler Math}
+\setmathfont{XITS Math}[%
+    range={"025AC-"025AD,
+    "025FD-"025FE}
+]
+\setsansfont[Ligatures=TeX,AutoFakeBold=2]{TeX Gyre Heros}
+%\usepackage[hiragino-pron,deluxe,jfm_yoko=jlreq,jfm_tate=jlreqv]{luatexja-preset}
+\setmainjfont{Hiragino Mincho ProN}
+\setsansjfont[BoldFont=HiraKakuPro-W6]{HiraKakuPro-W3}
+
+\makeatletter
+\renewcommand{\jlreqxkanjiskip}
+{0.25\jlreq@zw plus 0.08\jlreq@zw minus 0.125\jlreq@zw}
+\makeatother
+
+
+\usepackage{amsthm,amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{xparse,hooks,skins,breakable}
+\newcommand*{\okmark}{%
+    \tikz[baseline=(char.base)]{\node(char)[]{};
+    \draw [line width = 2.0pt]
+    (0em, 0.25em) --++ (0.25em, -0.25em) --++ (0.55em, 0.55em); 
+  }
+}
+\newcommand*{\mygoodmark}{%
+    \tikz[baseline=(char.base)]{\node(char)[]{};
+    \draw [line width = 1.5pt]
+    (0em, 0.25em) --++ (0.25em, -0.25em) --++ (0.45em, 0.5em); 
+  }
+}
+\newcommand*{\mybadmark}{%
+    \tikz[baseline=(char.base)]{\node(char)[]{};
+    \draw [line width = 1.5pt]
+    (0em, 0.5em) --++ (0.5em, -0.5em);
+    \draw [line width = 1.5pt]
+    (0em, 0em) --++ (0.5em, 0.5em); 
+  }
+}
+\newcommand{\gooditem}{\item[\mygoodmark\,]}
+\newcommand{\baditem}{\item[\mybadmark\,]}
+
+\newcommand*{\myqedmarkblack}{%
+    \tikz[baseline=(char.base)]{\node(char)[inner sep=0pt, outer sep=0pt]{};
+    \draw [line width = 0.28em]
+    (0em, 0.83em) --++ (0em, -0.9em); 
+  }
+}
+\newcommand*{\myqedmark}{%
+    \tikz[baseline=(char.base)]{\node(char)[inner sep=0pt, outer sep=0pt]{};
+    \draw (-0.14em, 0.83em) -- (-0.14em, -0.04em) -- (0.14em,-0.04em) -- (0.14em,0.83em) -- cycle; 
+  }
+}
+\renewcommand{\qedsymbol}{\mbox{\myqedmark}\!}
+
+\newcommand*{\remarksymbol}[1]{%
+    \tikz[baseline=(char.base)]{\node(char)[thick,circle, draw=#1, fill=#1!20, text=#1, inner sep=1.2pt, outer sep=0pt]{\(!\)};
+  }
+}
+
+%%% 数式系のパッケージ
+\usepackage{mleftright}
+\usepackage{braket}
+%\usepackage{amssymb} %なんか\ethにエラーを吐かれる
+%%%
+
+
+%%%%%%%% mycommands にコマンドを追加していく
+\NewDocumentCommand{\R}{}{\symbb{R}}
+\NewDocumentCommand{\N}{}{\symbb{N}}
+
+\NewDocumentCommand{\famf}{}{\symcal{F}}
+\NewDocumentCommand{\famg}{}{\symcal{G}}
+%\usepackage{./mycommands}
+\NewDocumentCommand{\blank}{}{{-}}
+\NewDocumentCommand{\blacklozenge}{}{\mdlgblklozenge}
+\NewDocumentCommand{\propertyK}{m}{(K_{#1})}
+\DeclareMathOperator{\catOpen}{\mathsf{Open}}
+\NewDocumentCommand{\Op}{m}{\catOpen\mleft(#1\mright)}
+\NewDocumentCommand{\Cov}{m}{\mathsf{Cov}\mleft(#1\mright)}
+\NewDocumentCommand\sha{}{\symcal{A}}
+\NewDocumentCommand\shb{}{\symcal{B}}
+\NewDocumentCommand\shc{}{\symcal{C}}
+\NewDocumentCommand\shf{}{\symcal{F}}
+\NewDocumentCommand\shg{}{\symcal{G}}
+\NewDocumentCommand\shh{}{\symcal{H}}
+\NewDocumentCommand\shi{}{\symcal{I}}
+\NewDocumentCommand\shk{}{\symcal{K}}
+\NewDocumentCommand{\shl}{}{\symcal{L}}
+\NewDocumentCommand{\shm}{}{\symcal{M}}
+\NewDocumentCommand{\shn}{}{\symcal{N}}
+\NewDocumentCommand{\sho}{}{\symcal{O}}
+\NewDocumentCommand\catC{}{\symsf{C}}
+% 圏
+\NewDocumentCommand\Ab{}{\mathsf{Ab}}
+\NewDocumentCommand\cRing{}{\mathsf{cRing}}
+\NewDocumentCommand\catSet{}{\mathsf{Set}}
+\NewDocumentCommand\AffSch{}{\mathsf{Aff.Sch}}
+\DeclareMathOperator{\QCohSheav}{\mathsf{QCoh}}
+\NewDocumentCommand\QCoh{m}{\QCohSheav\mleft(#1\mright)}
+\DeclareMathOperator{\catMod}{\mathsf{Mod}}
+\NewDocumentCommand{\Mod}{m}{\catMod\mleft(#1\mright)}
+
+\AtBeginDocument{
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+}
+\DeclareMathOperator{\res}{res}
+\DeclareMathOperator{\id}{id}
+\NewDocumentCommand\rest{m m}{{\mleft.{#1}\mright|_{#2}}}
+\DeclareMathOperator{\Sheav}{\mathsf{Sh}}
+\NewDocumentCommand\Sh{m}{\Sheav(#1)}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Coker}{Coker}
+\DeclareMathOperator{\Spec}{Spec}
+\NewDocumentCommand{\strsh}{O{}}{\sho_{#1}}
+\NewDocumentCommand{\sheafify}{m}{{{}^a{#1}}}
+
+
+%%%%%%%%%% 定理環境
+\usepackage{amsthm,amsmath}
+\newtheoremstyle{mystyle}{10pt}{10pt}{\upshape}{0pt}{\upshape\bfseries\gtfamily\upshape}{.}{10pt}{\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\theoremstyle{mystyle}
+\newtheorem{defi}{定義}[section]
+\newtheorem{prop}[defi]{命題}
+\newtheorem{theo}[defi]{定理}
+\newtheorem{lemm}[defi]{補題}
+\newtheorem{coro}[defi]{系}
+\newtheorem{exam}[defi]{例}
+
+\usepackage[unicode,hidelinks,pdfusetitle]{hyperref}
+
+\begin{document}
+\title{確率論のノート}
+\author{hupom}
+\date{\today}
+\begin{abstract}
+確率論および統計の知識などを勉強しながら書いていきます．当然に間違いが含まれます．
+
+また二段組のスタイルを検討しながら書くことも合わせて行うため，バージョンによっては組版がぐちゃぐちゃの可能性もあります．
+\end{abstract}
+\maketitle
+
+
+\section{はじめに：確率とは何か}
+\subsection{確率とモデル}
+確率論とは「偶然によって結果が決まる不確実な現象を記述するための手法」（楠岡）です．ここで問題になるのは，数式によって現象を記述するのは
+あくまで数学モデルでしかない，ということです．通常，現実の現象とその数学モデルを区別することは少ないですが，こと確率論においては，数学
+モデルが現実の現象をよく記述しているかというのは判定が難しい問題になります．
+
+確率論に基づく数学モデルを「確率モデル」と呼びます．例を用いて考えましょう．例えば「サイコロの\(1\)の目の出る確率は\(\dfrac{1}{6}\)である」
+という確率モデルを立て，実際にサイコロを振ると\(2\)の目が出ました．このとき，確率モデルが「良い」モデルだったのか，それとも「悪い」モデルだったのか，
+これだけでは判断できません．確率モデルの検証のためには「確率モデルを前提とすると一体何が言えるのか」を理論的に考える必要があり，それがまさに「確率論」
+です．
+
+確率モデルの含むパラメータを決定したり，モデルそのものの信頼性を調べる「確率モデルの検証」を行うのが「（数理）統計学」になります．
+
+確率論の知識がなくては統計学はできませんし，統計学の知識がなくては確率論は現実の役に立ちません．本稿では可能な限り確率論と統計学の両軸で
+知識をまとめていくことを意識しています．
+
+\subsection{確率とは何か}
+「確率とは何か」というのは今なお哲学的な議論がありますが，数学はこの問いに答えるのは避け，確率の満たすべき公理を定め，それを満たすものは
+なんであれ「確率」である，というKolmogorvの導入した公理主義的立場を取ります．
+
+厳密に公理主義の立場に立つなら無定義用語は説明しないものですが，イメージのために説明をつけます．雑に述べると，
+まず「サイコロを\(1\)回投げると\(1\)の目が出た」のような事象（event）を“すべて”集めたデカい集合\(\Omega\)を取ります．次に\(\Omega\)の
+中でいい感じの事象を集めた集合\(\symcal{F}\subset \Omega\)を考えます．最後に\(\symcal{F}\)の各元\(A\in\symcal{F}\)にその「確率」\(P(A)\)を
+対応させるいい感じの関数\(P\colon \symcal{F}\to\R\)を考え，この三つ組\((\Omega,\symcal{F},P)\)を「確率空間」と呼びます．
+
+上に現れる\(P\)が「確率」に相当するのですが，要は三つ組\((\Omega,\symcal{F},P)\)であってKolmogorovの公理系を満たすものは全部「確率」を考えられる
+確率空間であるとしてしまうのが公理主義的な立場です．
+
+以上の話は\(\Omega\)が有限集合であるような場合（例えばサイコロ振りなど）では直観によく整合します．が，\(\Omega\)が無限集合の場合には，素朴に確率を考える
+ことはもう難しくなります．確率の現代的な定式化はそうした場合も含む理論を構築するために，次章以降に述べるようなやや複雑な理路をたどります．
+
+
+\section{確率論}
+\subsection{確率の定義}
+「いい感じの\(\symcal{F}\)を定式化するのが\(\sigma\)-加法族になります．
+\begin{defi}
+空でない集合\(\Omega\)に対し，その部分集合族\(\symcal{F}\subset 2^\Omega\)が次を満たすとき，\(\sigma\)-加法族という．
+\begin{enumerate}
+    \item {\(\emptyset\in\symcal{F}\)．}
+    \item {\(A\in\symcal{F}\)ならば\(A^c\in\symcal{F}\)．}
+    \item {\(A_1\), \(A_2\), \(\ldots\in\symcal{F}\)ならば\(\bigcup\limits_{i\in \N} A_i\in\symcal{F}\)．}
+\end{enumerate}
+組\((\Omega,\symcal{F})\)を「可測空間」といい，\(\famf\)の元を\(\famf\)-可測集合，あるいは\(\famf\)-可測な集合という．
+\end{defi}
+3つ目の条件は\(A_1\cup A_2=A_1\cup A_2\cup\emptyset\cup\emptyset\cup\cdots\)のように考えることで，有限個の和集合についても閉じていることに注意する．
+要は\(\sigma\)-加法族とは，\(\Omega\)のうち補集合や（可算個の）和集合をとる操作ができる集合ということになる．
+
+これがなぜ良いのか？　集合の補集合は「事象の否定」に対応し，集合の和は「事象の和」に対応します．つまり\(\sigma\)-加法族は「確率」を考えたい集合
+の集まりとして満たしてほしい感じの性質を定式化したものになっています．
+
+この\(\famf\)の上でいい感じの写像を考えます．
+\begin{defi}
+測度空間\((\Omega,\famf)\)に対し，写像\(P\colon\famf\to[0,1]\)が次の2条件を満たすとき，\((\Omega,\famf)\)上の確率測度あるいは単に確率と
+いう:
+\begin{enumerate}
+    \item {\(P(\Omega)=1\)．}
+    \item {互いに素な集合\(A_1\), \(A_2\), \(\ldots\in\famf\)に対し
+    \[P\mleft(\bigcup_{i\in \N} A_i\mright)=\sum_{i=1}^{\infty} P(A_i).\]}
+\end{enumerate}
+三つ組\((\Omega,\famf,P)\)を確率空間と呼ぶ．また\(A\in\famf\)を事象と呼び，\(P(A)\)を事象\(A\)の確率という．
+\end{defi}
+2番目の条件を可算加法性といいます．以上が確率の現代数学における抽象的な定義です．
+
+\begin{defi}
+二つの事象\(A\), \(B\)について
+\[P(A\cap B)=P(A)P(B)\]
+がなりたつとき，\(A\)と\(B\)は独立であるという．
+\end{defi}
+
+\subsection{確率変数}
+まずは定義を与えます．
+\begin{defi}
+確率空間\((\Omega,\famf,P)\)と測度空間\((S,\famg)\)に対し，写像
+\[X\colon \Omega\to S\]
+であって，任意の\(G\in\famg\)に対し
+\[X^{-1}(G)=\Set{\omega\in\Omega | X(\omega)\in G}\in\famf\]
+がなりたつものを，（\(S\)-値の）確率変数という．
+\end{defi}
+
+
+確率変数には「確率空間に具体的な問題を設定する」という役割があります．
+例えば，確率変数はギャンブルのようなものだと考えると分かりやすいです．
+\begin{exam}
+サイコロを\(1\)回投げて，奇数なら一万円もらい，偶数なら一万円払うギャンブルを考える．これは
+\[X(\omega)=\begin{cases}
+    +10000 & (\omega=1,3,5)\\
+    -10000 & (\omega=2,4,6)
+\end{cases}\]
+という確率変数と考えられる．
+\end{exam}
+なお実数値の確率変数における\((S,\famg)\)とは何か？　というのが気になるかもしれません．
+技術的には\(S=\R\)のときは\(\famg\)として\(\R\)のすべての開区間を含む最小の\(\sigma\)-集合族（Borel集合族という）
+を設定するのですが，まあ「実数値で測れるのだな」と考えてもらって問題ありません．
+
+\subsection{確率分布と確率密度関数}
+以下では\((\Omega,\famf,P)\)上の\(\R\)-値の確率変数\(X\colon \Omega\to\R\)を考えます．
+ギャンブル（確率変数）そのものをいちいち考えるより，代わりにそのギャンブルで得られる損得とその確率のみに注目する方が合理的です．
+この考え方を定式化したものが確率分布です．
+
+\(p_X(a)=P(X^{-1}(\Set{a}))=P(\Set{\omega\in\Omega | X(\omega)=a})\)とおく．また\(X\)の値の集合\(\Im X\)を
+\[\Im X = \Set{a\in\R | p_X(a) > 0}\]
+と定める．
+\begin{defi}[離散確率変数の確率分布]
+値の集合が\(\Im X=\Set{a_1, a_2,\ldots}\)という離散集合のとき，\(X\)を離散確率変数といい，
+\[p_i = p_X(a_i)\]
+によって与えられる\((p_i)_{i=1}^{\infty}\)を\(X\)の確率分布という．
+\end{defi}
+
+\(X\)が一般の実数値を取り得る場合は，上述のような「一点」の確率が決まっても確率測度全体は定まらない．
+そこで次の「確率分布関数」という道具を用いる．
+\begin{defi}
+\((\Omega,\famf,P)\)上の実数値確率変数\(X\)に対し
+\begin{equation*}
+    \begin{split}
+        F_X(x) &\coloneqq P(X^{-1}([-\infty,x)))\\
+        &= P(\Set{\omega | X(\omega)\leq x})
+    \end{split}
+\end{equation*}
+を\(X\)の確率分布関数という．
+\end{defi}
+\end{document}
